@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tron Network Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            overflow-x: hidden;
+            background-color: #0a0a1a;
+            color: #ffffff;
+        }
+        
+        /* Dynamic background animation */
+        .dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, #1e5799, #207cca);
+            z-index: -1;
+            animation: bgAnimation 25s ease-in-out infinite alternate;
+        }
+        
+        @keyframes bgAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        
+        p {
+            color: #b3b3ff;
+            line-height: 1.6;
+        }
+        
+        .search-bar {
+            display: flex;
+            max-width: 600px;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border-radius: 30px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        input[type="text"]:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px rgba(32, 124, 202, 0.5);
+        }
+        
+        button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            padding: 10px 20px;
+            background-color: #207cca;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #1e5799;
+            transform: scale(1.05);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #207cca;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .card {
+            background-color: rgba(16, 20, 45, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(32, 124, 202, 0.3);
+        }
+        
+        .block-info {
+            margin-top: 20px;
+        }
+        
+        .block-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        .block-item:last-child {
+            border-bottom: none;
+        }
+        
+        .block-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .block-number, .block-hash, .block-time, .block-tx-count, .block-size {
+            color: #b3b3ff;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        
+        .pagination button {
+            padding: 8px 16px;
+            background-color: #207cca;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination button:hover {
+            background-color: #1e5799;
+            transform: translateY(-2px);
+        }
+        
+        .pagination button.active {
+            background-color: #1e5799;
+            font-weight: bold;
+        }
+        
+        .tab-container {
+            margin-bottom: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab:hover {
+            color: #207cca;
+        }
+        
+        .tab.active {
+            color: #207cca;
+            border-bottom: 2px solid #207cca;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: modalFadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .modal-content {
+            background-color: #10142d;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-in-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: #207cca;
+        }
+        
+        .transaction-detail {
+            margin-top: 20px;
+            background-color: rgba(16, 20, 45, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: #b3b3ff;
+        }
+        
+        .detail-value {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="dynamic-bg"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Tron Network Explorer</h1>
+            <p>Explore the Tron blockchain and monitor transactions in real-time</p>
+        </header>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Enter block number or hash to search">
+            <button onclick="searchBlock()">Search</button>
+        </div>
+        
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('blocks')">Blocks</div>
+                <div class="tab" onclick="switchTab('transactions')">Transactions</div>
+                <div class="tab" onclick="switchTab('accounts')">Accounts</div>
+            </div>
+            
+            <div id="blocks" class="tab-content active">
+                <div class="card">
+                    <h2>Recent Blocks</h2>
+                    <div id="recent-blocks">
+                        <div class="loading">
+                            <div class="loader"></div>
+                            <p>Loading recent blocks...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Block Details</h2>
+                    <div id="block-info" class="block-info">
+                        <p>Please search for a block to see detailed information.</p>
+                    </div>
+                </div>
+                
+                <div class="pagination">
+                    <button class="active">1</button>
+                    <button onclick="changePage(2)">2</button>
+                    <button onclick="changePage(3)">3</button>
+                    <button onclick="changePage(4)">4</button>
+                    <button onclick="changePage(5)">5</button>
+                    <button onclick="changePage(2)">Next</button>
+                </div>
+            </div>
+            
+            <div id="transactions" class="tab-content">
+                <div class="card">
+                    <h2>Recent Transactions</h2>
+                    <div id="recent-transactions">
+                        <div class="loading">
+                            <div class="loader"></div>
+                            <p>Loading recent transactions...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Transaction Details</h2>
+                    <div id="transaction-info" class="block-info">
+                        <p>Please select a transaction to see detailed information.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="accounts" class="tab-content">
+                <div class="card">
+                    <h2>Search Account</h2>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Enter Tron address">
+                        <button onclick="searchAccount()">Search</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Top Accounts</h2>
+                    <div id="top-accounts">
+                        <div class="loading">
+                            <div class="loader"></div>
+                            <p>Loading top accounts...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="transaction-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Transaction Details</h2>
+            <div id="modal-content" class="transaction-detail">
+                <!-- Transaction details will be populated here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize variables
+        let currentPage = 1;
+        let currentTab = 'blocks';
+        
+        // Function to switch between tabs
+        function switchTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            event.currentTarget.classList.add('active');
+            
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show the selected tab content
+            document.getElementById(tabName).classList.add('active');
+            currentTab = tabName;
+            
+            // Load data based on the selected tab
+            if (tabName === 'blocks') {
+                loadRecentBlocks();
+            } else if (tabName === 'transactions') {
+                loadRecentTransactions();
+            } else if (tabName === 'accounts') {
+                loadTopAccounts();
+            }
+        }
+        
+        // Function to change page
+        function changePage(pageNumber) {
+            // Update active page button
+            document.querySelectorAll('.pagination button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Find the button with the correct number and add active class
+            document.querySelector(`.pagination button:nth-child(${pageNumber})`).classList.add('active');
+            
+            currentPage = pageNumber;
+            
+            // Load data for the selected page
+            if (currentTab === 'blocks') {
+                loadRecentBlocks(pageNumber);
+            } else if (currentTab === 'transactions') {
+                loadRecentTransactions(pageNumber);
+            }
+        }
+        
+        // Function to search for a block
+        function searchBlock() {
+            const searchInput = document.querySelector('.search-bar input').value;
+            if (!searchInput) {
+                alert('Please enter a block number or hash');
+                return;
+            }
+            
+            // Show loading animation
+            document.getElementById('block-info').innerHTML = `
+                <div class="loading">
+                    <div class="loader"></div>
+                    <p>Fetching block data...</p>
+                </div>
+            `;
+            
+            // Here you would use the actual Tron Scan API
+            // For demonstration purposes, we'll simulate the response
+            setTimeout(() => {
+                const blockData = {
+                    number: parseInt(searchInput) || Math.floor(Math.random() * 10000000),
+                    hash: '0x' + Math.random().toString(36).substr(2, 64),
+                    parentHash: '0x' + Math.random().toString(36).substr(2, 64),
+                    nonce: '0x' + Math.random().toString(16).substr(2, 18),
+                    sha3Uncles: '0x' + Math.random().toString(36).substr(2, 64),
+                    logsBloom: '',
+                    transactionsRoot: '0x' + Math.random().toString(36).substr(2, 64),
+                    stateRoot: '0x' + Math.random().toString(36).substr(2, 64),
+                    receiptsRoot: '0x' + Math.random().toString(36).substr(2, 64),
+                    miner: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                    difficulty: Math.floor(Math.random() * 1000000000),
+                    totalDifficulty: Math.floor(Math.random() * 100000000000),
+                    extraData: '0x' + Math.random().toString(16).substr(2, 8),
+                    size: Math.floor(Math.random() * 2000) + 500,
+                    gasLimit: Math.floor(Math.random() * 10000000),
+                    gasUsed: Math.floor(Math.random() * 5000000),
+                    timestamp: new Date().getTime() - Math.floor(Math.random() * 3600000),
+                    transactions: Array(Math.floor(Math.random() * 20) + 1).fill().map(() => {
+                        return {
+                            hash: '0x' + Math.random().toString(36).substr(2, 64),
+                            nonce: Math.floor(Math.random() * 1000000),
+                            blockHash: '0x' + Math.random().toString(36).substr(2, 64),
+                            blockNumber: Math.floor(Math.random() * 10000000),
+                            transactionIndex: Math.floor(Math.random() * 200),
+                            from: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                            to: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                            value: (Math.random() * 1000).toFixed(4),
+                            gas: Math.floor(Math.random() * 100000),
+                            gasPrice: (Math.random() * 100).toFixed(2),
+                            input: '0x' + Math.random().toString(36).substr(2, 64)
+                        };
+                    })
+                };
+                
+                displayBlockDetails(blockData);
+            }, 1000);
+        }
+        
+        // Function to search for an account
+        function searchAccount() {
+            const searchInput = document.querySelector('#accounts .search-bar input').value;
+            if (!searchInput) {
+                alert('Please enter a Tron address');
+                return;
+            }
+            
+            // Show loading animation
+            document.getElementById('modal-content').innerHTML = `
+                <div class="loading">
+                    <div class="loader"></div>
+                    <p>Loading account details...</p>
+                </div>
+            `;
+            
+            document.getElementById('modal-title').textContent = 'Account Details';
+            
+            // Open the modal
+            document.getElementById('transaction-modal').style.display = 'block';
+            
+            // Here you would use the actual Tron Scan API
+            // For demonstration purposes, we'll simulate the response
+            setTimeout(() => {
+                const accountData = {
+                    address: searchInput.toUpperCase(),
+                    balance: (Math.random() * 1000000).toFixed(4),
+                    trxSent: Math.floor(Math.random() * 1000),
+                    trxReceived: Math.floor(Math.random() * 1000),
+                    votes: Math.floor(Math.random() * 10000),
+                    frozenBalance: (Math.random() * 10000).toFixed(4),
+                    bandwidth: Math.floor(Math.random() * 10000),
+                    energy: Math.floor(Math.random() * 10000),
+                    transactions: Array(Math.floor(Math.random() * 5) + 1).fill().map(() => {
+                        return {
+                            hash: '0x' + Math.random().toString(36).substr(2, 64),
+                            blockNumber: Math.floor(Math.random() * 10000000),
+                            timestamp: new Date().getTime() - Math.floor(Math.random() * 86400000),
+                            from: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                            to: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                            value: (Math.random() * 1000).toFixed(4),
+                            status: Math.random() > 0.1 ? 'Success' : 'Failed'
+                        };
+                    })
+                };
+                
+                document.getElementById('modal-content').innerHTML = `
+                    <div class="detail-row">
+                        <div class="detail-label">Address</div>
+                        <div class="detail-value">${accountData.address}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Balance (TRX)</div>
+                        <div class="detail-value">${accountData.balance}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">TX Sent</div>
+                        <div class="detail-value">${accountData.trxSent}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">TX Received</div>
+                        <div class="detail-value">${accountData.trxReceived}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Votes</div>
+                        <div class="detail-value">${accountData.votes}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Frozen Balance</div>
+                        <div class="detail-value">${accountData.frozenBalance}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Bandwidth</div>
+                        <div class="detail-value">${accountData.bandwidth}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Energy</div>
+                        <div class="detail-value">${accountData.energy}</div>
+                    </div>
+                    <h3 style="margin-top: 20px; color: #207cca;">Recent Transactions</h3>
+                    ${accountData.transactions.map(tx => `
+                        <div class="detail-row" style="padding: 10px; margin-bottom: 10px; background-color: rgba(255,255,255,0.05); border-radius: 5px;">
+                            <div class="detail-row">
+                                <div class="detail-label">Hash</div>
+                                <div class="detail-value">${tx.hash}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Block</div>
+                                <div class="detail-value">${tx.blockNumber}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Time</div>
+                                <div class="detail-value">${new Date(tx.timestamp).toLocaleString()}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">From</div>
+                                <div class="detail-value">${tx.from}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">To</div>
+                                <div class="detail-value">${tx.to}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Value</div>
+                                <div class="detail-value">${tx.value} TRX</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Status</div>
+                                <div class="detail-value" style="color: ${tx.status === 'Success' ? '#2ecc71' : '#e74c3c'};">${tx.status}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            }, 1000);
+        }
+        
+        // Function to display block details
+        function displayBlockDetails(block) {
+            const blockInfo = document.getElementById('block-info');
+            blockInfo.innerHTML = `
+                <div class="block-item">
+                    <div>
+                        <strong>Block Number:</strong> ${block.number}
+                    </div>
+                    <div class="block-number">${block.number}</div>
+                </div>
+                <div class="block-item">
+                    <div>
+                        <strong>Block Hash:</strong>
+                    </div>
+                    <div class="block-hash">${block.hash.substring(0, 10)}...${block.hash.substring(block.hash.length-10)}</div>
+                </div>
+                <div class="block-item">
+                    <div>
+                        <strong>Miner:</strong>
+                    </div>
+                    <div class="block-miner">${block.miner}</div>
+                </div>
+                <div class="block-item">
+                    <div>
+                        <strong>Time:</strong>
+                    </div>
+                    <div class="block-time">${new Date(block.timestamp).toLocaleString()}</div>
+                </div>
+                <div class="block-item">
+                    <div>
+                        <strong>Transaction Count:</strong>
+                    </div>
+                    <div class="block-tx-count">${block.transactions.length}</div>
+                </div>
+                <div class="block-item">
+                    <div>
+                        <strong>Block Size:</strong>
+                    </div>
+                    <div class="block-size">${block.size} bytes</div>
+                </div>
+                <div class="block-item">
+                    <div>
+                        <strong>Gas Limit:</strong>
+                    </div>
+                    <div>${block.gasLimit}</div>
+                </div>
+                <div class="block-item">
+                    <div>
+                        <strong>Gas Used:</strong>
+                    </div>
+                    <div>${block.gasUsed}</div>
+                </div>
+                <div class="block-item">
+                    <div>
+                        <strong>Difficulty:</strong>
+                    </div>
+                    <div>${block.difficulty}</div>
+                </div>
+                <h3 style="margin-top: 20px; color: #207cca;">Transactions</h3>
+                ${block.transactions.map(tx => `
+                    <div class="block-item" onclick="showTransaction('${tx.hash}')">
+                        <div>
+                            <strong>Hash:</strong> ${tx.hash.substring(0, 10)}...${tx.hash.substring(tx.hash.length-10)}
+                        </div>
+                        <div style="color: ${tx.status === 'Success' ? '#2ecc71' : '#e74c3c'};">${tx.status}</div>
+                    </div>
+                `).join('')}
+            `;
+        }
+        
+        // Function to show transaction details in a modal
+        function showTransaction(txHash) {
+            document.getElementById('modal-title').textContent = 'Transaction Details';
+            document.getElementById('modal-content').innerHTML = `
+                <div class="loading">
+                    <div class="loader"></div>
+                    <p>Loading transaction details...</p>
+                </div>
+            `;
+            
+            document.getElementById('transaction-modal').style.display = 'block';
+            
+            // Here you would use the actual Tron Scan API
+            // For demonstration purposes, we'll simulate the response
+            setTimeout(() => {
+                const transaction = {
+                    hash: txHash,
+                    blockNumber: Math.floor(Math.random() * 10000000),
+                    blockHash: '0x' + Math.random().toString(36).substr(2, 64),
+                    transactionIndex: Math.floor(Math.random() * 200),
+                    from: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                    to: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                    value: (Math.random() * 1000).toFixed(4),
+                    gas: Math.floor(Math.random() * 100000),
+                    gasPrice: (Math.random() * 100).toFixed(2),
+                    gasUsed: Math.floor(Math.random() * 100000),
+                    nonce: Math.floor(Math.random() * 1000000),
+                    input: '0x' + Math.random().toString(36).substr(2, 64),
+                    status: Math.random() > 0.1 ? 'Success' : 'Failed',
+                    timestamp: new Date().getTime() - Math.floor(Math.random() * 3600000)
+                };
+                
+                document.getElementById('modal-content').innerHTML = `
+                    <div class="detail-row">
+                        <div class="detail-label">Hash</div>
+                        <div class="detail-value">${transaction.hash.substring(0, 10)}...${transaction.hash.substring(transaction.hash.length-10)}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Block Number</div>
+                        <div class="detail-value">${transaction.blockNumber}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Block Hash</div>
+                        <div class="detail-value">${transaction.blockHash.substring(0, 10)}...${transaction.blockHash.substring(transaction.blockHash.length-10)}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Transaction Index</div>
+                        <div class="detail-value">${transaction.transactionIndex}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">From</div>
+                        <div class="detail-value">${transaction.from}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">To</div>
+                        <div class="detail-value">${transaction.to}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Value</div>
+                        <div class="detail-value">${transaction.value} TRX</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Gas Limit</div>
+                        <div class="detail-value">${transaction.gas}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Gas Price</div>
+                        <div class="detail-value">${transaction.gasPrice} SUN</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Gas Used</div>
+                        <div class="detail-value">${transaction.gasUsed}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Nonce</div>
+                        <div class="detail-value">${transaction.nonce}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Data</div>
+                        <div class="detail-value">${transaction.input}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Status</div>
+                        <div class="detail-value" style="color: ${transaction.status === 'Success' ? '#2ecc71' : '#e74c3c'};">${transaction.status}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Time</div>
+                        <div class="detail-value">${new Date(transaction.timestamp).toLocaleString()}</div>
+                    </div>
+                `;
+            }, 1000);
+        }
+        
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('transaction-modal').style.display = 'none';
+        }
+        
+        // Function to load recent blocks
+        function loadRecentBlocks(page = 1) {
+            const recentBlocksContainer = document.getElementById('recent-blocks');
+            
+            // Here you would use the actual Tron Scan API
+            // For demonstration purposes, we'll simulate the response
+            recentBlocksContainer.innerHTML = `
+                <div class="loading">
+                    <div class="loader"></div>
+                    <p>Loading recent blocks...</p>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                // Simulated data
+                const blocks = Array(10).fill().map((_, i) => {
+                    const baseNumber = 20000000 - (page - 1) * 10 - i;
+                    return {
+                        number: baseNumber,
+                        hash: '0x' + Math.random().toString(36).substr(2, 64),
+                        parentHash: '0x' + Math.random().toString(36).substr(2, 64),
+                        nonce: '0x' + Math.random().toString(16).substr(2, 18),
+                        sha3Uncles: '0x' + Math.random().toString(36).substr(2, 64),
+                        logsBloom: '',
+                        transactionsRoot: '0x' + Math.random().toString(36).substr(2, 64),
+                        stateRoot: '0x' + Math.random().toString(36).substr(2, 64),
+                        receiptsRoot: '0x' + Math.random().toString(36).substr(2, 64),
+                        miner: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                        difficulty: Math.floor(Math.random() * 1000000000),
+                        totalDifficulty: Math.floor(Math.random() * 100000000000),
+                        extraData: '0x' + Math.random().toString(16).substr(2, 8),
+                        size: Math.floor(Math.random() * 2000) + 500,
+                        gasLimit: Math.floor(Math.random() * 10000000),
+                        gasUsed: Math.floor(Math.random() * 5000000),
+                        timestamp: new Date().getTime() - (baseNumber % 3000) * 3000,
+                        transactions: Array(Math.floor(Math.random() * 20) + 1).fill().map(() => {
+                            return {
+                                hash: '0x' + Math.random().toString(36).substr(2, 64),
+                                nonce: Math.floor(Math.random() * 1000000),
+                                blockHash: '0x' + Math.random().toString(36).substr(2, 64),
+                                blockNumber: baseNumber,
+                                transactionIndex: Math.floor(Math.random() * 200),
+                                from: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                                to: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                                value: (Math.random() * 1000).toFixed(4),
+                                gas: Math.floor(Math.random() * 100000),
+                                gasPrice: (Math.random() * 100).toFixed(2),
+                                input: '0x' + Math.random().toString(36).substr(2, 64)
+                            };
+                        })
+                    };
+                });
+                
+                recentBlocksContainer.innerHTML = `
+                    ${blocks.map(block => `
+                        <div class="block-item" onclick="searchBlockByNumber(${block.number})">
+                            <div>
+                                <strong>Block:</strong> ${block.number}
+                            </div>
+                            <div>
+                                <strong>TX:</strong> ${block.transactions.length}
+                            </div>
+                            <div>
+                                <strong>Miner:</strong> ${block.miner}
+                            </div>
+                            <div>
+                                <strong>Size:</strong> ${block.size} bytes
+                            </div>
+                            <div>
+                                <strong>Time:</strong> ${new Date(block.timestamp).toLocaleString()}
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            }, 1000);
+        }
+        
+        // Function to load recent transactions
+        function loadRecentTransactions(page = 1) {
+            const recentTxsContainer = document.getElementById('recent-transactions');
+            
+            // Here you would use the actual Tron Scan API
+            // For demonstration purposes, we'll simulate the response
+            recentTxsContainer.innerHTML = `
+                <div class="loading">
+                    <div class="loader"></div>
+                    <p>Loading recent transactions...</p>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                // Simulated data
+                const transactions = Array(10).fill().map((_, i) => {
+                    const baseNumber = 20000000 - (page - 1) * 10 - i;
+                    return {
+                        hash: '0x' + Math.random().toString(36).substr(2, 64),
+                        nonce: Math.floor(Math.random() * 1000000),
+                        blockHash: '0x' + Math.random().toString(36).substr(2, 64),
+                        blockNumber: baseNumber,
+                        transactionIndex: Math.floor(Math.random() * 200),
+                        from: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                        to: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                        value: (Math.random() * 1000).toFixed(4),
+                        gas: Math.floor(Math.random() * 100000),
+                        gasPrice: (Math.random() * 100).toFixed(2),
+                        gasUsed: Math.floor(Math.random() * 100000),
+                        status: Math.random() > 0.1 ? 'Success' : 'Failed',
+                        timestamp: new Date().getTime() - (baseNumber % 3000) * 3000
+                    };
+                });
+                
+                recentTxsContainer.innerHTML = `
+                    ${transactions.map(tx => `
+                        <div class="block-item" onclick="showTransaction('${tx.hash}')">
+                            <div>
+                                <strong>Hash:</strong> ${tx.hash.substring(0, 10)}...${tx.hash.substring(tx.hash.length-10)}
+                            </div>
+                            <div>
+                                <strong>From:</strong> ${tx.from}
+                            </div>
+                            <div>
+                                <strong>To:</strong> ${tx.to}
+                            </div>
+                            <div>
+                                <strong>Value:</strong> ${tx.value} TRX
+                            </div>
+                            <div>
+                                <strong>Block:</strong> ${tx.blockNumber}
+                            </div>
+                            <div>
+                                <strong>Status:</strong> <span style="color: ${tx.status === 'Success' ? '#2ecc71' : '#e74c3c'};">${tx.status}</span>
+                            </div>
+                            <div>
+                                <strong>Time:</strong> ${new Date(tx.timestamp).toLocaleString()}
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            }, 1000);
+        }
+        
+        // Function to load top accounts
+        function loadTopAccounts() {
+            const topAccountsContainer = document.getElementById('top-accounts');
+            
+            // Here you would use the actual Tron Scan API
+            // For demonstration purposes, we'll simulate the response
+            topAccountsContainer.innerHTML = `
+                <div class="loading">
+                    <div class="loader"></div>
+                    <p>Loading top accounts...</p>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                // Simulated data
+                const accounts = Array(10).fill().map((_, i) => {
+                    return {
+                        address: 'TR' + Math.random().toString(36).substr(2, 34).toUpperCase(),
+                        balance: (1000000 - i * 50000 + Math.random() * 10000).toFixed(4),
+                        trxSent: Math.floor(1000 - i * 100 + Math.random() * 100),
+                        trxReceived: Math.floor(500 - i * 50 + Math.random() * 50),
+                        votes: Math.floor(100000 - i * 10000 + Math.random() * 10000),
+                        frozenBalance: (Math.random() * 10000).toFixed(4),
+                        bandwidth: Math.floor(Math.random() * 10000),
+                        energy: Math.floor(Math.random() * 10000)
+                    };
+                });
+                
+                topAccountsContainer.innerHTML = `
+                    ${accounts.map(account => `
+                        <div class="block-item" onclick="searchAccountByAddress('${account.address}')">
+                            <div>
+                                <strong>Address:</strong> ${account.address}
+                            </div>
+                            <div>
+                                <strong>Balance:</strong> ${account.balance} TRX
+                            </div>
+                            <div>
+                                <strong>TX Sent:</strong> ${account.trxSent}
+                            </div>
+                            <div>
+                                <strong>TX Received:</strong> ${account.trxReceived}
+                            </div>
+                            <div>
+                                <strong>Votes:</strong> ${account.votes}
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            }, 1000);
+        }
+        
+        // Function to search for a block by number
+        function searchBlockByNumber(number) {
+            document.querySelector('.search-bar input').value = number;
+            searchBlock();
+        }
+        
+        // Function to search for an account by address
+        function searchAccountByAddress(address) {
+            document.querySelector('#accounts .search-bar input').value = address;
+            searchAccount();
+        }
+        
+        // Function to simulate loading the page with initial data
+        function initPage() {
+            // Load initial blocks
+            loadRecentBlocks();
+            
+            // Set up event listeners for tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.textContent.toLowerCase());
+                });
+            });
+            
+            // Add click event listener to pagination buttons
+            document.querySelectorAll('.pagination button').forEach(button => {
+                if (!button.classList.contains('active')) {
+                    button.addEventListener('click', function() {
+                        changePage(parseInt(this.textContent));
+                    });
+                }
+            });
+        }
+        
+        // Initialize the page when it loads
+        window.onload = initPage;
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('transaction-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
