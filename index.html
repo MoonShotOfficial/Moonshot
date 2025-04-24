@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoonShot | Next-Gen Blockchain Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 全局设置 */
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #00ff88;
+            --text: #ffffff;
+            --dark-bg: #0a0a1a;
+            --card-bg: rgba(108, 92, 231, 0.1);
+            --gradient: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 50%, #00ff88 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text);
+            line-height: 1.6;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%230a0a1a"/><path d="M0,0L50,50M50,50L100,0M0,50L50,100M50,100L100,50" stroke="%231a1a3a" stroke-width="0.5"/></svg>');
+        }
+
+        /* 装饰元素 */
+        .decoration {
+            position: fixed;
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: 10%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(108, 92, 231, 0.3) 0%, rgba(108, 92, 231, 0) 70%);
+            border-radius: 50%;
+            animation: pulse 5s infinite alternate;
+        }
+
+        .decoration-2 {
+            bottom: 15%;
+            right: 8%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(162, 155, 254, 0.3) 0%, rgba(162, 155, 254, 0) 70%);
+            border-radius: 50%;
+            animation: pulse 7s infinite alternate;
+        }
+
+        .decoration-3 {
+            top: 40%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.3) 0%, rgba(0, 255, 136, 0) 70%);
+            border-radius: 50%;
+            animation: pulse 6s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+            transition: all 0.4s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 26, 0.95);
+            padding: 1rem 5%;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 500;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(108, 92, 231, 0.5));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><circle cx="50" cy="50" r="10" fill="%231a1a3a" opacity="0.3"/></svg>');
+            background-repeat: repeat;
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from {
+                filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.3));
+            }
+            to {
+                filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.5));
+            }
+        }
+
+        /* 快捷访问按钮 */
+        .quick-access {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .quick-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* 特性卡片 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 5rem 5%;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 255, 136, 0.1);
+        }
+
+        /* 渐变按钮 */
+        .gradient-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 1rem 0.5rem;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .gradient-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .gradient-btn.outline {
+            background: transparent;
+            border: 2px solid white;
+        }
+
+        .gradient-btn.outline:hover {
+            border-color: var(--gradient);
+        }
+
+        /* 分页功能 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 3rem 0;
+            gap: 1rem;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            border-radius: 50%;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .page-btn:hover, .page-btn.active {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-color: var(--accent);
+        }
+
+        /* 区块链技术时间线 */
+        .tech-timeline {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .timeline-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .timeline-item {
+            flex: 0 0 auto;
+            width: 300px;
+            scroll-snap-align: start;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .timeline-year {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        /* 区块链生态系统 */
+        .ecosystem {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .ecosystem-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .ecosystem-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .ecosystem-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .ecosystem-category {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* 实时数据 */
+        .real-data {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .data-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .data-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.1);
+        }
+
+        .data-name {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .data-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        /* TradingView图表 */
+        .trading-view {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .trading-view-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .trading-view-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            height: 600px;
+            position: relative;
+        }
+
+        .trading-view-chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        .trading-view-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .time-range-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-range-btn:hover, .time-range-btn.active {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-color: var(--accent);
+        }
+
+        /* 安全与隐私 */
+        .security {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .security-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .security-container {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .security-info {
+            flex: 1;
+        }
+
+        .security-feature {
+            margin-bottom: 2rem;
+        }
+
+        .security-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(108, 92, 231, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .security-icon i {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* 开发者资源 */
+        .dev-resources {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .resources-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .resources-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-color: var(--accent);
+        }
+
+        /* 社区 */
+        .community {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .community-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .community-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .community-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .community-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .community-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(108, 92, 231, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .community-icon i {
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        /* 常见问题 */
+        .faq {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .faq-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .faq-search {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            display: flex;
+            overflow: hidden;
+            border-radius: 50px;
+        }
+
+        .faq-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: var(--text);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .faq-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+        }
+
+        .faq-button {
+            padding: 1rem 2rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-button:hover {
+            transform: translateX(5px);
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .faq-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .faq-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.1);
+        }
+
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question::after {
+            content: '+';
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.open::after {
+            content: '-';
+            transform: rotate(45deg);
+        }
+
+        /* Roadmap */
+        .roadmap {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .roadmap-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .roadmap-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .roadmap-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .roadmap-quarter {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .roadmap-item {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--accent);
+        }
+
+        /* OKX区块浏览器API模块 */
+        .okx-explorer {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .explorer-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .explorer-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+        }
+
+        .explorer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .explorer-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .explorer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.1);
+        }
+
+        .explorer-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(108, 92, 231, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .explorer-icon i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .explorer-name {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .explorer-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .explorer-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* DappRadar API */
+        .dapp-radar {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dapp-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dapp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .dapp-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .dapp-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .dapp-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(108, 92, 231, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .dapp-icon i {
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        .dapp-name {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .dapp-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .dapp-stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .dapp-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .dapp-link::after {
+            content: ' →';
+        }
+
+        /* 跨链服务模块 */
+        .cross-chain {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cross-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cross-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cross-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .cross-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .cross-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .cross-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .cross-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            text-align: right;
+            padding: 0 1rem;
+            outline: none;
+        }
+
+        .chain-select {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            padding: 0 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .cross-button {
+            display: block;
+            width: 100%;
+            padding: 1.5rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .cross-button:hover {
+            transform: translateY(-3px);
+        }
+
+        .cross-result {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        /* 开发者博客 */
+        .dev-blog {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .blog-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .blog-date {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .blog-name {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-excerpt {
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* 合作伙伴 */
+        .partners {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .partners-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .partner-logo {
+            width: 100%;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .partner-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .partner-logo img {
+            max-width: 70%;
+            max-height: 60px;
+            filter: grayscale(100%) brightness(200%);
+            transition: filter 0.3s ease;
+        }
+
+        .partner-logo:hover img {
+            filter: grayscale(0%) brightness(100%);
+        }
+
+.language-switch {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+        .language-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn:hover {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- 装饰元素 -->
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="decoration decoration-3"></div>
+
+    
+    <!-- 语言切换按钮 -->
+<div class="language-switch">
+    <button class="language-btn" id="lang-switch">中文 / English</button>
+</div>
+
+    <nav class="navbar">
+        <div class="logo">Moonshot</div>
+        <div class="nav-links">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#tech" class="nav-link">Technology</a>
+            <a href="#ecosystem" class="nav-link">Ecosystem</a>
+            <a href="#roadmap" class="nav-link">Roadmap</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 id="hero-title">Redefining Blockchain Performance</h1>
+            <p class="hero-subtitle" id="hero-subtitle">Achieve 100,000 TPS with our revolutionary consensus protocol</p>
+            <div class="cta-container">
+                <a href="#" class="gradient-btn" id="hero-btn1">Start Building</a>
+                <a href="#" class="gradient-btn outline" id="hero-btn2">Explore Docs</a>
+                 <button class="gradient-btn outline" onclick="window.location.href='tron-explorer.html'">
+                    Launch Tron Explorer
+                </button>
+			     <button class="gradient-btn" onclick="window.location.href=' NFT-Gallery.html'">
+                    NFT Gallery
+                </button>
+            </div>
+            
+            <!-- 快捷访问按钮 -->
+            <div class="quick-access">
+                <a href="https://app.uniswap.org" class="quick-btn" target="_blank" id="quick-btn1">Uniswap</a>
+                <a href="https://www.okx.com" class="quick-btn" target="_blank" id="quick-btn2">OKX Web3</a>
+                <a href="https://sunflower-land.com" class="quick-btn" target="_blank" id="quick-btn3">Sunflower-land</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="feature-grid">
+        <div class="feature-card">
+            <h2 class="feature-title" id="feature1-title">⚡ Instant Finality</h2>
+            <p class="feature-text" id="feature1-text">Sub-second transaction confirmation with our novel consensus algorithm</p>
+        </div>
+        <div class="feature-card">
+            <h2 class="feature-title" id="feature2-title">🔐 Quantum-Safe</h2>
+            <p class="feature-text" id="feature2-text">Post-quantum cryptography implementation with lattice-based protocols</p>
+        </div>
+        <div class="feature-card">
+            <h2 class="feature-title" id="feature3-title">🌱 Carbon Negative</h2>
+            <p class="feature-text" id="feature3-text">Energy-efficient protocol with automatic carbon offset funding</p>
+        </div>
+    </section>
+
+    <!-- 分页功能 -->
+    <div class="pagination">
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">4</div>
+    </div>
+
+    <!-- 区块链技术时间线 -->
+    <section class="tech-timeline" id="tech">
+        <h2 class="timeline-title" id="timeline-title">Blockchain Technology Evolution</h2>
+        <div class="timeline-container">
+            <div class="timeline-item">
+                <div class="timeline-year" id="timeline1-year">2009</div>
+                <p class="timeline-description" id="timeline1-desc">Bitcoin emerges as the first decentralized cryptocurrency, introducing blockchain technology to the world.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year" id="timeline2-year">2014</div>
+                <p class="timeline-description" id="timeline2-desc">Ethereum launches, introducing smart contract functionality and expanding blockchain's potential applications.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year" id="timeline3-year">2017</div>
+                <p class="timeline-description" id="timeline3-desc">The ICO boom brings significant attention and investment to blockchain technology, though also leads to market speculation.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year" id="timeline4-year">2020</div>
+                <p class="timeline-description" id="timeline4-desc">DeFi (Decentralized Finance) gains traction, showcasing blockchain's potential to transform traditional financial systems.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year" id="timeline5-year">2023</div>
+                <p class="timeline-description" id="timeline5-desc">MoonShot Platform launches, pushing the boundaries of blockchain performance and scalability.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分页功能 -->
+    <div class="pagination">
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">4</div>
+    </div>
+
+    <!-- 区块链生态系统 -->
+    <section class="ecosystem" id="ecosystem">
+        <h2 class="ecosystem-title" id="ecosystem-title">Our Thriving Ecosystem</h2>
+        <div class="ecosystem-filter">
+            <button class="filter-btn active" data-filter="all" id="filter-all">All</button>
+            <button class="filter-btn" data-filter="finance" id="filter-finance">DeFi</button>
+            <button class="filter-btn" data-filter="gaming" id="filter-gaming">Gaming</button>
+            <button class="filter-btn" data-filter="tools" id="filter-tools">Tools</button>
+        </div>
+        <div class="ecosystem-grid">
+            <div class="ecosystem-card" data-category="finance">
+                <div class="ecosystem-category" id="ecosystem-card1-category">DeFi</div>
+                <h3 class="ecosystem-name" id="ecosystem-card1-name">LunaSwap</h3>
+                <p class="ecosystem-description" id="ecosystem-card1-desc">A decentralized exchange protocol built on MoonShot, offering low fees and high-speed transactions.</p>
+            </div>
+            <div class="ecosystem-card" data-category="gaming">
+                <div class="ecosystem-category" id="ecosystem-card2-category">Gaming</div>
+                <h3 class="ecosystem-name" id="ecosystem-card2-name">StarRealms</h3>
+                <p class="ecosystem-description" id="ecosystem-card2-desc">An immersive space MMORPG with true ownership of in-game assets through NFT technology.</p>
+            </div>
+            <div class="ecosystem-card" data-category="tools">
+                <div class="ecosystem-category" id="ecosystem-card3-category">Tools</div>
+                <h3 class="ecosystem-name" id="ecosystem-card3-name">MoonWallet</h3>
+                <p class="ecosystem-description" id="ecosystem-card3-desc">A secure, user-friendly wallet solution for interacting with the MoonShot ecosystem.</p>
+            </div>
+            <div class="ecosystem-card" data-category="finance">
+                <div class="ecosystem-category" id="ecosystem-card4-category">DeFi</div>
+                <h3 class="ecosystem-name" id="ecosystem-card4-name">VortexFinance</h3>
+                <p class="ecosystem-description" id="ecosystem-card4-desc">A lending and borrowing platform offering competitive APY rates and collateral flexibility.</p>
+            </div>
+            <div class="ecosystem-card" data-category="gaming">
+                <div class="ecosystem-category" id="ecosystem-card5-category">Gaming</div>
+                <h3 class="ecosystem-name" id="ecosystem-card5-name">CryptoPets</h3>
+                <p class="ecosystem-description" id="ecosystem-card5-desc">A virtual pet collection and breeding game with unique genetics algorithm based on blockchain.</p>
+            </div>
+            <div class="ecosystem-card" data-category="tools">
+                <div class="ecosystem-category" id="ecosystem-card6-category">Tools</div>
+                <h3 class="ecosystem-name" id="ecosystem-card6-name">BlockScan</h3>
+                <p class="ecosystem-description" id="ecosystem-card6-desc">A comprehensive block explorer and analytics tool for monitoring MoonShot network activity.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分页功能 -->
+    <div class="pagination">
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">4</div>
+    </div>
+
+    <!-- TradingView图表 -->
+    <section class="trading-view">
+        <h2 class="trading-view-title" id="trading-view-title">Market Analysis</h2>
+        <div class="trading-view-container">
+            <div class="trading-view-chart" id="tradingview-chart"></div>
+        </div>
+        <div class="trading-view-controls">
+            <button class="time-range-btn active" data-range="1D" id="time-range-btn1">1D</button>
+            <button class="time-range-btn" data-range="1W" id="time-range-btn2">1W</button>
+            <button class="time-range-btn" data-range="1M" id="time-range-btn3">1M</button>
+            <button class="time-range-btn" data-range="3M" id="time-range-btn4">3M</button>
+            <button class="time-range-btn" data-range="1Y" id="time-range-btn5">1Y</button>
+            <button class="time-range-btn" data-range="ALL" id="time-range-btn6">ALL</button>
+        </div>
+    </section>
+
+    <!-- DappRadar API -->
+    <section class="dapp-radar">
+        <h2 class="dapp-title" id="dapp-title">DappRadar Analytics</h2>
+        <div class="dapp-grid">
+            <div class="dapp-card">
+                <div class="dapp-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3 class="dapp-name" id="dapp-card1-name">Axie Infinity</h3>
+                <div class="dapp-stats">
+                    <div class="dapp-stat" id="dapp-card1-stat1">Rank: #1</div>
+                    <div class="dapp-stat" id="dapp-card1-stat2">Users: 1.2M</div>
+                    <div class="dapp-stat" id="dapp-card1-stat3">Volume: $50M</div>
+                </div>
+                <p class="dapp-description" id="dapp-card1-desc">A play-to-earn NFT game where players can collect, breed, and battle Axies.</p>
+                <a href="https://axieinfinity.com" class="dapp-link" id="dapp-card1-link">Visit Dapp</a>
+            </div>
+            <div class="dapp-card">
+                <div class="dapp-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3 class="dapp-name" id="dapp-card2-name">Uniswap</h3>
+                <div class="dapp-stats">
+                    <div class="dapp-stat" id="dapp-card2-stat1">Rank: #2</div>
+                    <div class="dapp-stat" id="dapp-card2-stat2">Users: 850K</div>
+                    <div class="dapp-stat" id="dapp-card2-stat3">Volume: $120M</div>
+                </div>
+                <p class="dapp-description" id="dapp-card2-desc">A decentralized exchange (DEX) for Ethereum-based tokens.</p>
+                <a href="https://app.uniswap.org" class="dapp-link" id="dapp-card2-link">Visit Dapp</a>
+            </div>
+            <div class="dapp-card">
+                <div class="dapp-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <h3 class="dapp-name" id="dapp-card3-name">Decentraland</h3>
+                <div class="dapp-stats">
+                    <div class="dapp-stat" id="dapp-card3-stat1">Rank: #3</div>
+                    <div class="dapp-stat" id="dapp-card3-stat2">Users: 420K</div>
+                    <div class="dapp-stat" id="dapp-card3-stat3">Volume: $35M</div>
+                </div>
+                <p class="dapp-description" id="dapp-card3-desc">A virtual reality platform powered by the Ethereum blockchain.</p>
+                <a href="https://decentraland.org" class="dapp-link" id="dapp-card3-link">Visit Dapp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section class="roadmap" id="roadmap">
+        <h2 class="roadmap-title" id="roadmap-title">MoonShot Roadmap</h2>
+        <div class="roadmap-grid">
+            <div class="roadmap-card">
+                <h3 class="roadmap-quarter" id="roadmap-card1-quarter">Q1 2023</h3>
+                <div class="roadmap-item" id="roadmap-card1-item1">Mainnet Launch</div>
+                <div class="roadmap-item" id="roadmap-card1-item2">Developer Documentation</div>
+                <div class="roadmap-item" id="roadmap-card1-item3">Testnet Incentive Program</div>
+            </div>
+            <div class="roadmap-card">
+                <h3 class="roadmap-quarter" id="roadmap-card2-quarter">Q2 2023</h3>
+                <div class="roadmap-item" id="roadmap-card2-item1">Cross-chain Bridge</div>
+                <div class="roadmap-item" id="roadmap-card2-item2">EVM Compatibility</div>
+                <div class="roadmap-item" id="roadmap-card2-item3">Developer Grants Program</div>
+            </div>
+            <div class="roadmap-card">
+                <h3 class="roadmap-quarter" id="roadmap-card3-quarter">Q3 2023</h3>
+                <div class="roadmap-item" id="roadmap-card3-item1">Smart Contract Support</div>
+                <div class="roadmap-item" id="roadmap-card3-item2">NFT Marketplace</div>
+                <div class="roadmap-item" id="roadmap-card3-item3">DAO Governance</div>
+            </div>
+            <div class="roadmap-card">
+                <h3 class="roadmap-quarter" id="roadmap-card4-quarter">Q4 2023</h3>
+                <div class="roadmap-item" id="roadmap-card4-item1">EVM 2.0 Upgrade</div>
+                <div class="roadmap-item" id="roadmap-card4-item2">Layer 2 Solutions</div>
+                <div class="roadmap-item" id="roadmap-card4-item3">Global Hackathon</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 跨链服务模块 -->
+    <section class="cross-chain">
+        <h2 class="cross-title" id="cross-title">Cross-Chain Services</h2>
+        <div class="cross-container">
+            <div class="cross-card">
+                <h3 id="cross-card-title">Cross-Chain Token Transfer</h3>
+                <p id="cross-card-text">Transfer tokens across different blockchains securely and efficiently.</p>
+                <div class="cross-form">
+                    <div class="cross-group">
+                        <input type="text" class="cross-input" id="crossAmount" placeholder="0.0">
+                        <select class="chain-select" id="sourceChain">
+                            <option value="ethereum">Ethereum</option>
+                            <option value="binance">Binance Smart Chain</option>
+                            <option value="polygon">Polygon</option>
+                        </select>
+                    </div>
+                    <div class="cross-group">
+                        <input type="text" class="cross-input" id="crossAmountOut" placeholder="0.0" readonly>
+                        <select class="chain-select" id="targetChain">
+                            <option value="binance">Binance Smart Chain</option>
+                            <option value="polygon">Polygon</option>
+                            <option value="ethereum">Ethereum</option>
+                        </select>
+                    </div>
+                    <button type="button" class="cross-button" id="crossButton">Transfer</button>
+                </div>
+                <div id="crossResult" class="cross-result"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OKX区块浏览器API模块 -->
+    <section class="okx-explorer">
+        <h2 class="explorer-title" id="explorer-title">OKX Block Explorer API</h2>
+        <div class="explorer-container">
+            <div class="explorer-grid">
+                <div class="explorer-card">
+                    <div class="explorer-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="explorer-name" id="explorer-card1-name">Block Search</h3>
+                    <p class="explorer-description" id="explorer-card1-desc">Search for blocks by height or hash and retrieve detailed information.</p>
+                    <a href="https://www.okx.com/explorer" class="explorer-link" id="explorer-card1-link">Explore Blocks</a>
+                </div>
+                <div class="explorer-card">
+                    <div class="explorer-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3 class="explorer-name" id="explorer-card2-name">Transaction Lookup</h3>
+                    <p class="explorer-description" id="explorer-card2-desc">Lookup transactions by hash and view detailed transaction data.</p>
+                    <a href="https://www.okx.com/explorer" class="explorer-link" id="explorer-card2-link">Explore Transactions</a>
+                </div>
+                <div class="explorer-card">
+                    <div class="explorer-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="explorer-name" id="explorer-card3-name">Address Analysis</h3>
+                    <p class="explorer-description" id="explorer-card3-desc">Analyze wallet addresses and view balance and transaction history.</p>
+                    <a href="https://www.okx.com/explorer" class="explorer-link" id="explorer-card3-link">Explore Addresses</a>
+                </div>
+                <div class="explorer-card">
+                    <div class="explorer-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="explorer-name" id="explorer-card4-name">Network Statistics</h3>
+                    <p class="explorer-description" id="explorer-card4-desc">Access real-time network statistics and historical data.</p>
+                    <a href="https://www.okx.com/explorer" class="explorer-link" id="explorer-card4-link">View Statistics</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 开发者资源 -->
+    <section class="dev-resources">
+        <h2 class="resources-title" id="resources-title">Developer Resources</h2>
+        <div class="resources-tabs">
+            <button class="tab-btn active" data-tab="all" id="resources-tab-all">All</button>
+            <button class="tab-btn" data-tab="docs" id="resources-tab-docs">Documentation</button>
+            <button class="tab-btn" data-tab="tools" id="resources-tab-tools">Tools</button>
+            <button class="tab-btn" data-tab="api" id="resources-tab-api">APIs</button>
+            <button class="tab-btn" data-tab="sdk" id="resources-tab-sdk">SDKs</button>
+        </div>
+        <div class="resources-grid">
+            <div class="resource-card" data-type="docs">
+                <div class="resource-type" id="resource-card1-type">Documentation</div>
+                <h3 class="resource-name" id="resource-card1-name">Core Protocol Docs</h3>
+                <p class="resource-description" id="resource-card1-desc">Comprehensive documentation covering our consensus mechanism, node operation, and transaction processing.</p>
+                <a href="#" class="resource-link" id="resource-card1-link">View Documentation</a>
+            </div>
+            <div class="resource-card" data-type="tools">
+                <div class="resource-type" id="resource-card2-type">Tool</div>
+                <h3 class="resource-name" id="resource-card2-name">Smart Contract Debugger</h3>
+                <p class="resource-description" id="resource-card2-desc">Advanced debugging tool for smart contracts with step-by-step execution and state inspection.</p>
+                <a href="#" class="resource-link" id="resource-card2-link">Try Debugger</a>
+            </div>
+            <div class="resource-card" data-type="api">
+                <div class="resource-type" id="resource-card3-type">API</div>
+                <h3 class="resource-name" id="resource-card3-name">Transaction API</h3>
+                <p class="resource-description" id="resource-card3-desc">RESTful API for submitting transactions, querying transaction status, and retrieving transaction history.</p>
+                <a href="#" class="resource-link" id="resource-card3-link">API Reference</a>
+            </div>
+            <div class="resource-card" data-type="sdk">
+                <div class="resource-type" id="resource-card4-type">SDK</div>
+                <h3 class="resource-name" id="resource-card4-name">JavaScript SDK</h3>
+                <p class="resource-description" id="resource-card4-desc">Full-featured SDK for JavaScript developers to interact with the MoonShot network and build dApps.</p>
+                <a href="#" class="resource-link" id="resource-card4-link">Download SDK</a>
+            </div>
+            <div class="resource-card" data-type="docs">
+                <div class="resource-type" id="resource-card5-type">Tutorial</div>
+                <h3 class="resource-name" id="resource-card5-name">Building Your First dApp</h3>
+                <p class="resource-description" id="resource-card5-desc">Step-by-step guide to creating your first decentralized application on the MoonShot platform.</p>
+                <a href="#" class="resource-link" id="resource-card5-link">Start Tutorial</a>
+            </div>
+            <div class="resource-card" data-type="tools">
+                <div class="resource-type" id="resource-card6-type">Tool</div>
+                <h3 class="resource-name" id="resource-card6-name">Blockchain Explorer</h3>
+                <p class="resource-description" id="resource-card6-desc">Powerful block explorer with advanced analytics and transaction visualization capabilities.</p>
+                <a href="#" class="resource-link" id="resource-card6-link">Launch Explorer</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分页功能 -->
+    <div class="pagination">
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">4</div>
+    </div>
+
+    <!-- 社区 -->
+    <section class="community">
+        <h2 class="community-title" id="community-title">Join Our Community</h2>
+        <div class="community-highlights">
+            <div class="community-card">
+                <div class="community-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="community-name" id="community-card1-name">Developer Forum</h3>
+                <p class="community-description" id="community-card1-desc">Connect with other developers, share knowledge, and collaborate on building the future of blockchain.</p>
+                <a href="#" class="gradient-btn outline" id="community-card1-link">Join Forum</a>
+            </div>
+            <div class="community-card">
+                <div class="community-icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <h3 class="community-name" id="community-card2-name">News & Updates</h3>
+                <p class="community-description" id="community-card2-desc">Stay informed about the latest platform updates, security advisories, and community announcements.</p>
+                <a href="#" class="gradient-btn outline" id="community-card2-link">View News</a>
+            </div>
+            <div class="community-card">
+                <div class="community-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3 class="community-name" id="community-card3-name">Partnerships</h3>
+                <p class="community-description" id="community-card3-desc">Explore collaboration opportunities with our ecosystem partners and build innovative solutions together.</p>
+                <a href="#" class="gradient-btn outline" id="community-card3-link">Partner With Us</a>
+            </div>
+        </div>
+
+        <div class="community-activity">
+            <div class="activity-placeholder" id="community-activity">
+                Community Activity Stream
+            </div>
+        </div>
+    </section>
+
+    <!-- 分页功能 -->
+    <div class="pagination">
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">4</div>
+    </div>
+
+    <!-- 常见问题 -->
+    <section class="faq">
+        <h2 class="faq-title" id="faq-title">Frequently Asked Questions</h2>
+        <div class="faq-search">
+            <input type="text" class="faq-input" placeholder="Search for answers..." id="faq-search-input">
+            <button class="faq-button" id="faq-search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-card">
+                <div class="faq-question" id="faq1-q">What is MoonShot?</div>
+                <div class="faq-answer" id="faq1-a">
+                    MoonShot is a next-generation blockchain platform designed to deliver unprecedented performance, scalability, and security for decentralized applications.
+                </div>
+                <div class="faq-question" id="faq2-q">How does MoonShot achieve high TPS?</div>
+                <div class="faq-answer" id="faq2-a">
+                    MoonShot utilizes a novel consensus algorithm that combines proof-of-stake with advanced sharding techniques to achieve over 100,000 transactions per second.
+                </div>
+                <div class="faq-question" id="faq3-q">Is MoonShot compatible with Ethereum?</div>
+                <div class="faq-answer" id="faq3-a">
+                    Yes, MoonShot is EVM-compatible, allowing developers to port existing Ethereum dApps with minimal modification.
+                </div>
+            </div>
+            <div class="faq-card">
+                <div class="faq-question" id="faq4-q">How do I get started with MoonShot?</div>
+                <div class="faq-answer" id="faq4-a">
+                    You can start by visiting our documentation portal, downloading our SDK, or joining our developer community.
+                </div>
+                <div class="faq-question" id="faq5-q">What programming languages are supported?</div>
+                <div class="faq-answer" id="faq5-a">
+                    MoonShot currently supports Solidity, Rust, and TypeScript with more languages planned for future releases.
+                </div>
+                <div class="faq-question" id="faq6-q">Are there grants available for developers?</div>
+                <div class="faq-answer" id="faq6-a">
+                    Yes, we have a comprehensive developer grants program to support innovative projects built on MoonShot.
+                </div>
+            </div>
+            <div class="faq-card">
+                <div class="faq-question" id="faq7-q">How secure is MoonShot?</div>
+                <div class="faq-answer" id="faq7-a">
+                    MoonShot employs multiple security layers including quantum-resistant cryptography and rigorous consensus validation.
+                </div>
+                <div class="faq-question" id="faq8-q">Can I stake MOON tokens?</div>
+                <div class="faq-answer" id="faq8-a">
+                    Yes, staking is available for MOON token holders, providing rewards while supporting network security.
+                </div>
+                <div class="faq-question" id="faq9-q">Where can I buy MOON tokens?</div>
+                <div class="faq-answer" id="faq9-a">
+                    MOON tokens are available on major exchanges including Binance, Coinbase, and our official DEX partners.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 合作伙伴 -->
+    <section class="partners">
+        <h2 class="partners-title" id="partners-title">Our Partners</h2>
+        <div class="partners-grid">
+            <div class="partner-logo">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='80' viewBox='0 0 200 80'><rect width='200' height='80' fill='none'/><text x='50%' y='50%' font-family='Arial' font-size='20' text-anchor='middle' dominant-baseline='middle' fill='white'>Partner A</text></svg>" alt="Partner A">
+            </div>
+            <div class="partner-logo">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='80' viewBox='0 0 200 80'><rect width='200' height='80' fill='none'/><text x='50%' y='50%' font-family='Arial' font-size='20' text-anchor='middle' dominant-baseline='middle' fill='white'>Partner B</text></svg>" alt="Partner B">
+            </div>
+            <div class="partner-logo">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='80' viewBox='0 0 200 80'><rect width='200' height='80' fill='none'/><text x='50%' y='50%' font-family='Arial' font-size='20' text-anchor='middle' dominant-baseline='middle' fill='white'>Partner C</text></svg>" alt="Partner C">
+            </div>
+            <div class="partner-logo">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='80' viewBox='0 0 200 80'><rect width='200' height='80' fill='none'/><text x='50%' y='50%' font-family='Arial' font-size='20' text-anchor='middle' dominant-baseline='middle' fill='white'>Partner D</text></svg>" alt="Partner D">
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script src="https://unpkg.com/walletconnect@1.4.7/dist/WalletConnectProvider.min.js"></script>
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+        // 中英文内容
+        const translations = {
+            en: {
+                'hero-title': 'Redefining Blockchain Performance',
+                'hero-subtitle': 'Achieve 100,000 TPS with our revolutionary consensus protocol',
+                'hero-btn1': 'Start Building',
+                'hero-btn2': 'Explore Docs',
+                'hero-btn3': 'Launch Tron Explorer',
+                'hero-btn4': 'NFT Gallery',
+                'feature1-title': '⚡ Instant Finality',
+                'feature1-text': 'Sub-second transaction confirmation with our novel consensus algorithm',
+                'feature2-title': '🔐 Quantum-Safe',
+                'feature2-text': 'Post-quantum cryptography implementation with lattice-based protocols',
+                'feature3-title': '🌱 Carbon Negative',
+                'feature3-text': 'Energy-efficient protocol with automatic carbon offset funding',
+                'quick-btn1': 'Uniswap',
+                'quick-btn2': 'OKX Web3',
+                'quick-btn3': 'Sunflower-land',
+                'timeline-title': 'Blockchain Technology Evolution',
+                'timeline1-year': '2009',
+                'timeline1-desc': 'Bitcoin emerges as the first decentralized cryptocurrency, introducing blockchain technology to the world.',
+                'timeline2-year': '2014',
+                'timeline2-desc': 'Ethereum launches, introducing smart contract functionality and expanding blockchain\'s potential applications.',
+                'timeline3-year': '2017',
+                'timeline3-desc': 'The ICO boom brings significant attention and investment to blockchain technology, though also leads to market speculation.',
+                'timeline4-year': '2020',
+                'timeline4-desc': 'DeFi (Decentralized Finance) gains traction, showcasing blockchain\'s potential to transform traditional financial systems.',
+                'timeline5-year': '2023',
+                'timeline5-desc': 'MoonShot Platform launches, pushing the boundaries of blockchain performance and scalability.',
+                'ecosystem-title': 'Our Thriving Ecosystem',
+                'filter-all': 'All',
+                'filter-finance': 'DeFi',
+                'filter-gaming': 'Gaming',
+                'filter-tools': 'Tools',
+                'ecosystem-card1-category': 'DeFi',
+                'ecosystem-card1-name': 'LunaSwap',
+                'ecosystem-card1-desc': 'A decentralized exchange protocol built on MoonShot, offering low fees and high-speed transactions.',
+                'ecosystem-card2-category': 'Gaming',
+                'ecosystem-card2-name': 'StarRealms',
+                'ecosystem-card2-desc': 'An immersive space MMORPG with true ownership of in-game assets through NFT technology.',
+                'ecosystem-card3-category': 'Tools',
+                'ecosystem-card3-name': 'MoonWallet',
+                'ecosystem-card3-desc': 'A secure, user-friendly wallet solution for interacting with the MoonShot ecosystem.',
+                'ecosystem-card4-category': 'DeFi',
+                'ecosystem-card4-name': 'VortexFinance',
+                'ecosystem-card4-desc': 'A lending and borrowing platform offering competitive APY rates and collateral flexibility.',
+                'ecosystem-card5-category': 'Gaming',
+                'ecosystem-card5-name': 'CryptoPets',
+                'ecosystem-card5-desc': 'A virtual pet collection and breeding game with unique genetics algorithm based on blockchain.',
+                'ecosystem-card6-category': 'Tools',
+                'ecosystem-card6-name': 'BlockScan',
+                'ecosystem-card6-desc': 'A comprehensive block explorer and analytics tool for monitoring MoonShot network activity.',
+                'trading-view-title': 'Market Analysis',
+                'cross-title': 'Cross-Chain Services',
+                'cross-card-title': 'Cross-Chain Token Transfer',
+                'cross-card-text': 'Transfer tokens across different blockchains securely and efficiently.',
+                'crossButton': 'Transfer',
+                'explorer-title': 'OKX Block Explorer API',
+                'dev-resources-title': 'Developer Resources',
+                'resources-tab-all': 'All',
+                'resources-tab-docs': 'Documentation',
+                'resources-tab-tools': 'Tools',
+                'resources-tab-api': 'APIs',
+                'resources-tab-sdk': 'SDKs',
+                'faq-title': 'Frequently Asked Questions',
+                'faq-search-placeholder': 'Search for answers...',
+                'faq-search-btn': 'Search',
+                'faq1-q': 'What is MoonShot?',
+                'faq1-a': 'MoonShot is a next-generation blockchain platform designed to deliver unprecedented performance, scalability, and security for decentralized applications.',
+                'faq2-q': 'How does MoonShot achieve high TPS?',
+                'faq2-a': 'MoonShot utilizes a novel consensus algorithm that combines proof-of-stake with advanced sharding techniques to achieve over 100,000 transactions per second.',
+                'faq3-q': 'Is MoonShot compatible with Ethereum?',
+                'faq3-a': 'Yes, MoonShot is EVM-compatible, allowing developers to port existing Ethereum dApps with minimal modification.',
+                'faq4-q': 'How do I get started with MoonShot?',
+                'faq4-a': 'You can start by visiting our documentation portal, downloading our SDK, or joining our developer community.',
+                'faq5-q': 'What programming languages are supported?',
+                'faq5-a': 'MoonShot currently supports Solidity, Rust, and TypeScript with more languages planned for future releases.',
+                'faq6-q': 'Are there grants available for developers?',
+                'faq6-a': 'Yes, we have a comprehensive developer grants program to support innovative projects built on MoonShot.',
+                'faq7-q': 'How secure is MoonShot?',
+                'faq7-a': 'MoonShot employs multiple security layers including quantum-resistant cryptography and rigorous consensus validation.',
+                'faq8-q': 'Can I stake MOON tokens?',
+                'faq8-a': 'Yes, staking is available for MOON token holders, providing rewards while supporting network security.',
+                'faq9-q': 'Where can I buy MOON tokens?',
+                'faq9-a': 'MOON tokens are available on major exchanges including Binance, Coinbase, and our official DEX partners.',
+                'partners-title': 'Our Partners'
+            },
+            zh: {
+                'hero-title': '重新定义区块链性能',
+                'hero-subtitle': '用我们的革命性共识协议实现每秒10万笔交易',
+                'hero-btn1': '开始构建',
+                'hero-btn2': '探索文档',
+                'hero-btn3': '启动 Tron 探索器',
+                'hero-btn4': 'NFT 画廊',
+                'feature1-title': '⚡ 即时终局性',
+                'feature1-text': '通过我们的新型共识算法实现亚秒级交易确认',
+                'feature2-title': '🔐 量子安全',
+                'feature2-text': '实现基于格密码学的后量子密码学',
+                'feature3-title': '🌱 碳负排放',
+                'feature3-text': '能源高效的协议，自动资助碳抵消',
+                'quick-btn1': 'Uniswap',
+                'quick-btn2': 'OKX Web3',
+                'quick-btn3': 'Sunflower-land',
+                'timeline-title': '区块链技术演变',
+                'timeline1-year': '2009',
+                'timeline1-desc': '比特币作为第一个去中心化加密货币出现，向世界引入了区块链技术。',
+                'timeline2-year': '2014',
+                'timeline2-desc': '以太坊启动，引入智能合约功能，扩展了区块链的潜在应用。',
+                'timeline3-year': '2017',
+                'timeline3-desc': '首次代币发行(ICO)热潮为区块链技术带来了显著的关注和投资，但也导致了市场投机。',
+                'timeline4-year': '2020',
+                'timeline4-desc': '去中心化金融(DeFi)获得 traction，展示了区块链转变传统金融系统的潜力。',
+                'timeline5-year': '2023',
+                'timeline5-desc': 'MoonShot 平台启动，推动了区块链性能和可扩展性的边界。',
+                'ecosystem-title': '我们蓬勃发展的生态系统',
+                'filter-all': '全部',
+                'filter-finance': 'DeFi',
+                'filter-gaming': '游戏',
+                'filter-tools': '工具',
+                'ecosystem-card1-category': 'DeFi',
+                'ecosystem-card1-name': 'LunaSwap',
+                'ecosystem-card1-desc': '建立在 MoonShot 上的去中心化交易所协议，提供低费用和高速交易。',
+                'ecosystem-card2-category': '游戏',
+                'ecosystem-card2-name': 'StarRealms',
+                'ecosystem-card2-desc': '一个沉浸式的太空 MMORPG，通过 NFT 技术实现游戏中资产的真实所有权。',
+                'ecosystem-card3-category': '工具',
+                'ecosystem-card3-name': 'MoonWallet',
+                'ecosystem-card3-desc': '一个安全、用户友好的钱包解决方案，用于与 MoonShot 生态系统交互。',
+                'ecosystem-card4-category': 'DeFi',
+                'ecosystem-card4-name': 'VortexFinance',
+                'ecosystem-card4-desc': '一个提供具有竞争力的年收益率和抵押品灵活性的借贷平台。',
+                'ecosystem-card5-category': '游戏',
+                'ecosystem-card5-name': 'CryptoPets',
+                'ecosystem-card5-desc': '一个基于区块链的虚拟宠物收集和繁殖游戏，具有独特的遗传算法。',
+                'ecosystem-card6-category': '工具',
+                'ecosystem-card6-name': 'BlockScan',
+                'ecosystem-card6-desc': '一个全面的区块浏览器和分析工具，用于监控 MoonShot 网络活动。',
+                'trading-view-title': '市场分析',
+                'cross-title': '跨链服务',
+                'cross-card-title': '跨链代币转账',
+                'cross-card-text': '安全高效地在不同区块链之间转账。',
+                'crossButton': '转账',
+                'explorer-title': 'OKX 区块浏览器 API',
+                'dev-resources-title': '开发者资源',
+                'resources-tab-all': '全部',
+                'resources-tab-docs': '文档',
+                'resources-tab-tools': '工具',
+                'resources-tab-api': 'API',
+                'resources-tab-sdk': 'SDK',
+                'faq-title': '常见问题',
+                'faq-search-placeholder': '搜索答案...',
+                'faq-search-btn': '搜索',
+                'faq1-q': '什么是 MoonShot？',
+                'faq1-a': 'MoonShot 是一个为去中心化应用提供前所未有的性能、可扩展性和安全性的下一代区块链平台。',
+                'faq2-q': 'MoonShot 如何实现高 TPS？',
+                'faq2-a': 'MoonShot 使用一种新型共识算法，结合了权益证明和先进的分片技术，实现了每秒超过 10 万笔交易。',
+                'faq3-q': 'MoonShot 与以太坊兼容吗？',
+                'faq3-a': '是的，MoonShot 与 EVM 兼容，允许开发者以最小的修改移植现有的以太坊 dApp。',
+                'faq4-q': '如何开始使用 MoonShot？',
+                'faq4-a': '你可以从访问我们的文档门户、下载我们的 SDK 或加入我们的开发者社区开始。',
+                'faq5-q': '支持哪些编程语言？',
+                'faq5-a': 'MoonShot 目前支持 Solidity、Rust 和 TypeScript，计划在未来发布时支持更多语言。',
+                'faq6-q': '有开发者资助计划吗？',
+                'faq6-a': '是的，我们有一个全面的开发者资助计划，以支持在 MoonShot 上构建的创新项目。',
+                'faq7-q': 'MoonShot 有多安全？',
+                'faq7-a': 'MoonShot 采用了包括量子抗密码学和严格的共识验证在内的多层安全措施。',
+                'faq8-q': '可以质押 MOON 代币吗？',
+                'faq8-a': '是的，质押对 MOON 代币持有者开放，提供奖励，同时支持网络安全。',
+                'faq9-q': '在哪里可以购买 MOON 代币？',
+                'faq9-a': 'MOON 代币在 Binance、Coinbase 等主要交易所以及我们的官方 DEX 合作伙伴处可用。',
+                'partners-title': '我们的合作伙伴'
+            }
+        };
+
+        // 语言切换功能
+        let currentLang = 'en';
+        const langSwitch = document.getElementById('lang-switch');
+
+        langSwitch.addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            updateLanguage();
+            langSwitch.textContent = currentLang === 'en' ? '中文 / English' : 'English / 中文';
+        });
+
+        function updateLanguage() {
+            // 更新所有可翻译元素
+            for (const key in translations[currentLang]) {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.tagName === 'INPUT' && element.type === 'text') {
+                        element.value = translations[currentLang][key];
+                    } else {
+                        element.textContent = translations[currentLang][key];
+                    }
+                }
+            }
+        }
+
+        // FAQ 折叠功能
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                question.classList.toggle('open');
+                question.nextElementSibling.classList.toggle('open');
+            });
+        });
+
+        // 跨链服务功能
+        document.getElementById('crossButton').addEventListener('click', async () => {
+            if (!signer) {
+                alert('Please connect your wallet first');
+                return;
+            }
+            
+            const amount = document.getElementById('crossAmount').value;
+            if (!amount || parseFloat(amount) <= 0) {
+                alert('Please enter a valid amount to transfer');
+                return;
+            }
+            
+            const sourceChain = document.getElementById('sourceChain').value;
+            const targetChain = document.getElementById('targetChain').value;
+    
+            if (sourceChain === targetChain) {
+                alert('Please select different chains for transfer');
+                return;
+            }
+    
+            try {
+                document.getElementById('crossResult').textContent = currentLang === 'en' ? 'Cross-chain transfer initiated!' : '跨链转账已启动！';
+    
+                // 模拟交易处理
+                setTimeout(() => {
+                    document.getElementById('crossResult').textContent = currentLang === 'en' ? 'Cross-chain transfer successful!' : '跨链转账成功！';
+                }, 3000);
+            } catch (error) {
+                console.error('Error during cross-chain transfer:', error);
+                document.getElementById('crossResult').textContent = currentLang === 'en' ? 'Error during cross-chain transfer: ' + error.message : '跨链转账错误：' + error.message;
+            }
+        });
+
+        // 导航栏交互
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // 生态系统筛选
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+                
+                const filterValue = button.getAttribute('data-filter');
+                
+                document.querySelectorAll('.ecosystem-card').forEach(card => {
+                    if (filterValue === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = card.getAttribute('data-category') === filterValue ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+
+        // 开发者资源标签
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+                
+                const tabValue = button.getAttribute('data-tab');
+                
+                document.querySelectorAll('.resource-card').forEach(card => {
+                    if (tabValue === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = card.getAttribute('data-type') === tabValue ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+
+        // 常见问题搜索
+        document.querySelector('.faq-input').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            document.querySelectorAll('.faq-card').forEach(card => {
+                let cardVisible = false;
+                
+                card.querySelectorAll('.faq-question').forEach(question => {
+                    if (question.textContent.toLowerCase().includes(searchTerm)) {
+                        cardVisible = true;
+                    }
+                });
+                
+                card.style.display = cardVisible ? 'block' : 'none';
+            });
+        });
+
+        // 分页功能
+        document.querySelectorAll('.page-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.page-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+            });
+        });
+
+        // TradingView图表
+        new TradingView.widget({
+            container_id: "tradingview-chart",
+            width: "100%",
+            height: "600",
+            symbol: "BINANCE:BTCUSDT",
+            interval: "D",
+            timezone: "Etc/UTC",
+            theme: "dark",
+            style: "1",
+            locale: "en",
+            toolbar_bg: "#1c2435",
+            enable_publishing: false,
+            allow_symbol_change: true,
+            container: "tradingview-chart",
+            hide_side_toolbar: true,
+            hide_top_toolbar: true,
+            hide_legend: false
+        });
+
+        // 时间范围按钮
+        document.querySelectorAll('.time-range-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.time-range-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+                
+                const range = button.getAttribute('data-range');
+                TradingView.widget().setInterval(range);
+            });
+        });
+    </script>
+</body>
+</html>
