@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moonshot Blockchain</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 全局样式 */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #00ff88;
+            --text: #ffffff;
+            --dark-bg: #0a0a1a;
+            --card-bg: rgba(108, 92, 231, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text);
+            line-height: 1.6;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%230a0a1a"/><path d="M0,0L50,50M50,50L100,0M0,50L50,100M50,100L100,50" stroke="%231a1a3a" stroke-width="0.5"/></svg>');
+            font-family: Arial, sans-serif;
+        }
+
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+	    font-size: 1.5rem;
+        }
+	/* 针对中文字体的样式 */
+	.chinese-font {
+    		font-size: 1.2rem; /* 根据需要调整字体大小 */
+	}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            margin-bottom: 50px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 英雄区域 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50%;
+            height: auto;
+            z-index: 1;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+	
+	.gradient-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 1rem 0.5rem;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .gradient-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .gradient-btn.outline {
+            background: transparent;
+            border: 2px solid white;
+        }
+
+        .gradient-btn.outline:hover {
+            border-color: var(--gradient);
+        }
+
+        /* 语言切换 */
+        .language-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .language-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* 功能区域 */
+        .features {
+            background-color: rgba(10, 10, 26, 0.8);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        /* 应用区域 */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 代币区域 */
+        .token-section {
+            background-color: rgba(10, 10, 26, 0.8);
+        }
+
+        .token-chart {
+            width: 100%;
+            height: 300px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        /* 路线图区域 */
+        .roadmap-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .roadmap-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background-color: var(--accent);
+            transform: translateX(-50%);
+        }
+
+        .timeline-point {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .timeline-content::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--accent);
+            border-radius: 50%;
+        }
+
+        .timeline-content.left {
+            left: 0;
+        }
+
+        .timeline-content.left::after {
+            left: 100%;
+        }
+
+        .timeline-content.right {
+            right: 0;
+        }
+
+        .timeline-content.right::after {
+            right: 100%;
+        }
+
+        /* FAQ 区域 */
+        .faq {
+            background-color: rgba(10, 10, 26, 0.8);
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .faq-answer {
+            display: none;
+            padding-top: 15px;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        /* 页脚 */
+        footer {
+            padding: 50px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+        }
+
+        .footer-bottom {
+            margin-top: 30px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero-image {
+                position: relative;
+                width: 100%;
+                transform: none;
+                margin-top: 30px;
+            }
+
+            .hero h1 {
+                font-size: 4rem;
+            }
+
+            .roadmap-timeline::before {
+                left: 30px;
+            }
+
+            .timeline-content {
+                width: calc(100% - 60px);
+            }
+
+            .timeline-content.left,
+            .timeline-content.right {
+                left: 60px;
+            }
+
+            .timeline-content.left::after,
+            .timeline-content.right::after {
+                left: -10px;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- 语言切换 -->
+    <div class="language-switch">
+        <button class="gradient-btn" id="lang-switch">中文 / English</button>
+    </div>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="pixel-font" id="hero-title">Moonshot Blockchain: Powering Decentralized Innovation</h2>
+                <p class="pixel-font" id="hero-subtitle">A secure, scalable, and efficient blockchain for the next generation of applications.</p>
+                <p class="pixel-font" id="hero-text">Moonshot Blockchain delivers fast transactions, robust security, and a platform for developers and businesses to build decentralized solutions.</p>
+                <div class="hero-cta">
+                    <a href="#features" class="btn btn-primary pixel-font" id="learn-more">Learn More</a>
+                    <a href="#" class="btn btn-outline pixel-font" id="join-access">Join Early Access</a>
+                </div>
+              </section>
+
+    <!-- 功能区域 -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title pixel-font" id="features-title">Why Moonshot Blockchain?</h2>
+            <p class="section-subtitle pixel-font" id="features-subtitle">Designed for performance and reliability.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <h3 class="pixel-font" id="feature1-title">High Speed</h3>
+                    <p id="feature1-desc">Processes thousands of transactions per second with low latency.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-lock"></i></div>
+                    <h3 class="pixel-font" id="feature2-title">Enhanced Security</h3>
+                    <p id="feature2-desc">Audited smart contracts and advanced encryption.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+                    <h3 class="pixel-font" id="feature3-title">Scalability</h3>
+                    <p id="feature3-desc">Supports a wide range of applications with minimal fees.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-leaf"></i></div>
+                    <h3 class="pixel-font" id="feature4-title">Sustainable</h3>
+                    <p id="feature4-desc">Energy-efficient proof-of-stake consensus.</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#" class="btn btn-primary pixel-font" id="read-whitepaper">Read Our Whitepaper</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 应用区域 -->
+    <section class="applications">
+        <div class="container">
+            <h2 class="section-title pixel-font" id="apps-title">Build on Moonshot</h2>
+            <p class="section-subtitle pixel-font" id="apps-subtitle">A versatile platform for diverse industries.</p>
+            <div class="apps-grid">
+                <div class="app-card">
+                    <h3 class="pixel-font" id="app1-title">Finance</h3>
+                    <p id="app1-desc">Develop secure DeFi protocols and payment systems.</p>
+                </div>
+                <div class="app-card">
+                    <h3 class="pixel-font" id="app2-title">Digital Assets</h3>
+                    <p id="app2-desc">Create NFT marketplaces and token ecosystems.</p>
+                </div>
+                <div class="app-card">
+                    <h3 class="pixel-font" id="app3-title">Enterprise</h3>
+                    <p id="app3-desc">Streamline operations with transparent, secure data management.</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#" class="btn btn-primary pixel-font" id="explore-tools">Explore Developer Tools</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 代币区域 -->
+    <section class="token-section">
+        <div class="container">
+            <h2 class="section-title pixel-font" id="token-title">$MOON: The Heart of Moonshot</h2>
+            <p class="section-subtitle pixel-font" id="token-subtitle">A utility token for transactions and governance.</p>
+            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <p class="pixel-font" id="token-desc1">Pay transaction fees and access services.</p>
+                <p class="pixel-font" id="token-desc2">Stake to participate in network governance.</p>
+                <p class="pixel-font" id="token-desc3">Transparent distribution: 50% public, 30% development, 20% team (locked).</p>
+            </div>
+            <div class="token-chart"></div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#" class="btn btn-primary pixel-font" id="view-tokenomics">View Tokenomics</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 路线图区域 -->
+    <section class="roadmap">
+        <div class="container">
+            <h2 class="section-title pixel-font" id="roadmap-title">Our Path Forward</h2>
+            <p class="section-subtitle pixel-font" id="roadmap-subtitle">Key milestones for Moonshot Blockchain.</p>
+            <div class="roadmap-timeline">
+                <div class="timeline-point">
+                    <div class="timeline-content left pixel-font">
+                        <h3 id="roadmap-q2">Q2 2025</h3>
+                        <p id="roadmap-q2-desc">Testnet launch</p>
+                    </div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-content right pixel-font">
+                        <h3 id="roadmap-q3">Q3 2025</h3>
+                        <p id="roadmap-q3-desc">Mainnet deployment</p>
+                    </div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-content left pixel-font">
+                        <h3 id="roadmap-q4">Q4 2025</h3>
+                        <p id="roadmap-q4-desc">Token sale and exchange listings</p>
+                    </div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-content right pixel-font">
+                        <h3 id="roadmap-q1">Q1 2026</h3>
+                        <p id="roadmap-q1-desc">Governance activation</p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#" class="btn btn-primary pixel-font" id="subscribe-updates">Subscribe for Updates</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ 区域 -->
+    <section class="faq">
+        <div class="container">
+            <h2 class="section-title pixel-font" id="faq-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3 class="pixel-font" id="faq1-title">What is Moonshot Blockchain?</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" id="faq1-answer">
+                        <p>A high-performance blockchain for decentralized applications.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3 class="pixel-font" id="faq2-title">How secure is it?</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" id="faq2-answer">
+                        <p>Features audited contracts and enterprise-grade encryption.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3 class="pixel-font" id="faq3-title">Who can use it?</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" id="faq3-answer">
+                        <p>Developers, businesses, and individuals building or using dApps.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3 class="pixel-font" id="faq4-title">How do I get $MOON?</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer" id="faq4-answer">
+                        <p>Available via public sale in Q4 2025.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#" class="btn btn-primary pixel-font" id="contact-us">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#" class="pixel-font" id="footer-home">Home</a>
+                    <a href="#" class="pixel-font" id="footer-whitepaper">Whitepaper</a>
+                    <a href="#" class="pixel-font" id="footer-developers">Developers</a>
+                    <a href="#" class="pixel-font" id="footer-contact">Contact</a>
+                    <a href="#" class="pixel-font" id="footer-privacy">Privacy Policy</a>
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom pixel-font">
+                <p id="footer-copyright">© 2025 Moonshot Blockchain. All rights reserved. Cryptocurrency investments carry risks; please conduct your own research.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 中英文内容
+        const translations = {
+            en: {
+                'hero-title': 'Moonshot Blockchain: Powering Decentralized Innovation',
+                'hero-subtitle': 'A secure, scalable, and efficient blockchain for the next generation of applications.',
+                'hero-text': 'Moonshot Blockchain delivers fast transactions, robust security, and a platform for developers and businesses to build decentralized solutions.',
+                'learn-more': 'Learn More',
+                'join-access': 'Join Early Access',
+                
+                'features-title': 'Why Moonshot Blockchain?',
+                'features-subtitle': 'Designed for performance and reliability.',
+                'feature1-title': 'High Speed',
+                'feature1-desc': 'Processes thousands of transactions per second with low latency.',
+                'feature2-title': 'Enhanced Security',
+                'feature2-desc': 'Audited smart contracts and advanced encryption.',
+                'feature3-title': 'Scalability',
+                'feature3-desc': 'Supports a wide range of applications with minimal fees.',
+                'feature4-title': 'Sustainable',
+                'feature4-desc': 'Energy-efficient proof-of-stake consensus.',
+                'read-whitepaper': 'Read Our Whitepaper',
+                
+                'apps-title': 'Build on Moonshot',
+                'apps-subtitle': 'A versatile platform for diverse industries.',
+                'app1-title': 'Finance',
+                'app1-desc': 'Develop secure DeFi protocols and payment systems.',
+                'app2-title': 'Digital Assets',
+                'app2-desc': 'Create NFT marketplaces and token ecosystems.',
+                'app3-title': 'Enterprise',
+                'app3-desc': 'Streamline operations with transparent, secure data management.',
+                'explore-tools': 'Explore Developer Tools',
+                
+                'token-title': '$MOON: The Heart of Moonshot',
+                'token-subtitle': 'A utility token for transactions and governance.',
+                'token-desc1': 'Pay transaction fees and access services.',
+                'token-desc2': 'Stake to participate in network governance.',
+                'token-desc3': 'Transparent distribution: 50% public, 30% development, 20% team (locked).',
+                'view-tokenomics': 'View Tokenomics',
+                
+                'roadmap-title': 'Our Path Forward',
+                'roadmap-subtitle': 'Key milestones for Moonshot Blockchain.',
+                'roadmap-q2': 'Q2 2025',
+                'roadmap-q2-desc': 'Testnet launch',
+                'roadmap-q3': 'Q3 2025',
+                'roadmap-q3-desc': 'Mainnet deployment',
+                'roadmap-q4': 'Q4 2025',
+                'roadmap-q4-desc': 'Token sale and exchange listings',
+                'roadmap-q1': 'Q1 2026',
+                'roadmap-q1-desc': 'Governance activation',
+                'subscribe-updates': 'Subscribe for Updates',
+                
+                'faq-title': 'Frequently Asked Questions',
+                'faq1-title': 'What is Moonshot Blockchain?',
+                'faq1-answer': 'A high-performance blockchain for decentralized applications.',
+                'faq2-title': 'How secure is it?',
+                'faq2-answer': 'Features audited contracts and enterprise-grade encryption.',
+                'faq3-title': 'Who can use it?',
+                'faq3-answer': 'Developers, businesses, and individuals building or using dApps.',
+                'faq4-title': 'How do I get $MOON?',
+                'faq4-answer': 'Available via public sale in Q4 2025.',
+                'contact-us': 'Contact Us',
+                
+                'footer-home': 'Home',
+                'footer-whitepaper': 'Whitepaper',
+                'footer-developers': 'Developers',
+                'footer-contact': 'Contact',
+                'footer-privacy': 'Privacy Policy',
+                'footer-copyright': '© 2025 Moonshot Blockchain. All rights reserved. Cryptocurrency investments carry risks; please conduct your own research.'
+            },
+            zh: {
+                'hero-title': '月射区块链：赋能去中心化创新',
+                'hero-subtitle': '为下一代应用提供安全、可扩展且高效的区块链。',
+                'hero-text': '月射区块链提供快速交易、强大的安全性和为开发者及企业提供构建去中心化解决方案的平台。',
+                'learn-more': '了解更多',
+                'join-access': '加入早期体验',
+                
+                'features-title': '为什么选择月射区块链？',
+                'features-subtitle': '为性能和可靠性而设计。',
+                'feature1-title': '高速度',
+                'feature1-desc': '每秒处理数千笔交易，延迟极低。',
+                'feature2-title': '增强安全性',
+                'feature2-desc': '经过审计的智能合约和高级加密技术。',
+                'feature3-title': '可扩展性',
+                'feature3-desc': '支持广泛的应用，费用极低。',
+                'feature4-title': '可持续性',
+                'feature4-desc': '能源效率高的权益证明共识机制。',
+                'read-whitepaper': '阅读白皮书',
+                
+                'apps-title': '在月射上构建',
+                'apps-subtitle': '为各行业提供多功能平台。',
+                'app1-title': '金融',
+                'app1-desc': '开发安全的DeFi协议和支付系统。',
+                'app2-title': '数字资产',
+                'app2-desc': '创建NFT市场和代币生态系统。',
+                'app3-title': '企业',
+                'app3-desc': '通过透明、安全的数据管理简化运营。',
+                'explore-tools': '探索开发者工具',
+                
+                'token-title': '$MOON：月射的核心',
+                'token-subtitle': '用于交易和治理的效用代币。',
+                'token-desc1': '支付交易费用并访问服务。',
+                'token-desc2': '质押以参与网络治理。',
+                'token-desc3': '透明分配：50% 公开，30% 开发，20% 团队（锁定）。',
+                'view-tokenomics': '查看代币经济学',
+                
+                'roadmap-title': '我们的前进道路',
+                'roadmap-subtitle': '月射区块链的关键里程碑。',
+                'roadmap-q2': '2025年第二季度',
+                'roadmap-q2-desc': '测试网启动',
+                'roadmap-q3': '2025年第三季度',
+                'roadmap-q3-desc': '主网部署',
+                'roadmap-q4': '2025年第四季度',
+                'roadmap-q4-desc': '代币销售和交易所上市',
+                'roadmap-q1': '2026年第一季度',
+                'roadmap-q1-desc': '治理激活',
+                'subscribe-updates': '订阅更新',
+                
+                'faq-title': '常见问题',
+                'faq1-title': '什么是月射区块链？',
+                'faq1-answer': '为去中心化应用提供高性能区块链。',
+                'faq2-title': '它有多安全？',
+                'faq2-answer': '具有经过审计的合约和企业级加密技术。',
+                'faq3-title': '谁可以使用它？',
+                'faq3-answer': '构建或使用dApp的开发者、企业和个人。',
+                'faq4-title': '如何获取$MOON？',
+                'faq4-answer': '2025年第四季度通过公开销售获取。',
+                'contact-us': '联系我们',
+                
+                'footer-home': '首页',
+                'footer-whitepaper': '白皮书',
+                'footer-developers': '开发者',
+                'footer-contact': '联系我们',
+                'footer-privacy': '隐私政策',
+                'footer-copyright': '© 2025 月射区块链。保留所有权利。加密货币投资存在风险；请自行进行研究。'
+            }
+        };
+
+        // 语言切换功能
+        let currentLang = 'en';
+        const langSwitch = document.getElementById('lang-switch');
+
+        langSwitch.addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            updateLanguage();
+            langSwitch.textContent = currentLang === 'en' ? '中文 / English' : 'English / 中文';
+        });
+
+        function updateLanguage() {
+            // 更新所有可翻译元素
+            for (const key in translations[currentLang]) {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = translations[currentLang][key];
+                }
+            }
+        }
+
+        // FAQ 折叠功能
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
+                const icon = question.querySelector('i');
+                if (faqItem.classList.contains('active')) {
+                    icon.classList.remove('fa-plus');
+                    icon.classList.add('fa-minus');
+                } else {
+                    icon.classList.remove('fa-minus');
+                    icon.classList.add('fa-plus');
+                }
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 初始化语言
+        updateLanguage();
+    </script>
+</body>
+</html>
